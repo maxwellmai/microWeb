@@ -1,10 +1,12 @@
 package pri.maxwell.microweb.controller;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pri.maxwell.microweb.MicroWebApplication;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author: Mai
@@ -13,15 +15,14 @@ import pri.maxwell.microweb.MicroWebApplication;
  */
 @RestController
 public class HomeController {
+    final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
-    private static Logger log = LogManager.getLogger(MicroWebApplication.class);
-
-    @GetMapping("/")
-    public String home() {
-        log.debug(666);
-        log.info(123);
-        log.warn(456);
-        log.error(789);
-        return "hello world!";
+    @GetMapping("/doTestObject")
+    public String testObjectReturn() {
+        Map<String, Integer> map = new HashMap();
+        map.put("qingfen", 16);
+        map.put("lantian", 17);
+        map.put("baiyun", 18);
+        return "new UniformReponseHandler<Map>().sendSuccessResponse(map)";
     }
 }
