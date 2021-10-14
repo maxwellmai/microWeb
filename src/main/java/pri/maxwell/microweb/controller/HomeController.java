@@ -18,6 +18,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
+        log.debug(666);
         log.info(123);
         log.warn(456);
         log.error(789);
