@@ -3,10 +3,11 @@ package pri.maxwell.microweb.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import pri.maxwell.microweb.model.User;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.validation.Valid;
 
 /**
  * @Author: Mai
@@ -17,12 +18,14 @@ import java.util.Map;
 public class HomeController {
     final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
-    @GetMapping("/doTestObject")
-    public String testObjectReturn() {
-        Map<String, Integer> map = new HashMap();
-        map.put("qingfen", 16);
-        map.put("lantian", 17);
-        map.put("baiyun", 18);
-        return "new UniformReponseHandler<Map>().sendSuccessResponse(map)";
+    @GetMapping("/")
+    public String home(@RequestParam("hello") int id) {
+        int i = 9 / id;
+        return "hello!" + i;
+    }
+
+    @GetMapping("/test")
+    public User test(@Valid User user) {
+        return user;
     }
 }

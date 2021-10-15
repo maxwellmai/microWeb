@@ -11,7 +11,6 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
-import pri.maxwell.microweb.model.User;
 
 /**
  * @Author: Mai
@@ -19,7 +18,7 @@ import pri.maxwell.microweb.model.User;
  * @Description: 统一封装controller返回的string和object数据
  */
 @RestControllerAdvice
-public class ResponseAdvice implements ResponseBodyAdvice {
+public class ResponseAdvice implements ResponseBodyAdvice<Object> {
     final Logger logger = LoggerFactory.getLogger(ResponseAdvice.class);
     @Autowired
     private ObjectMapper objectMapper;
@@ -32,9 +31,13 @@ public class ResponseAdvice implements ResponseBodyAdvice {
     @SneakyThrows
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        // 如果 Controller 直接返回 String 的话，SpringBoot 是直接返回，故我们需要手动转换成 json
         if (body instanceof String) {
-            return objectMapper.writeValueAsString(new User(100L, (String) body));
+            return objectMapper.writeValueAsString(ResultData.ok(body));
         }
-        return new User(100L, (String) body);
+        if (body instanceof ResultData) {
+            return body;
+        }
+        return ResultData.ok(body);
     }
 }
